@@ -3,7 +3,6 @@
 # @DateTime: 2023/10/17 14:37
 # @SoftWare: PyCharm
 from fastapi.security import OAuth2PasswordRequestForm
-from jose import jwt
 
 import exceptions
 from common import utils

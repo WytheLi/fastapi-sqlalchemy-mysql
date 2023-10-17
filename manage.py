@@ -3,13 +3,10 @@
 # @DateTime: 2023/10/17 14:17
 # @SoftWare: PyCharm
 import uvicorn
-from fastapi import FastAPI, APIRouter
 from fastapi.logger import logger
 
 from common.conf import settings
 from common.register import create_app
-from db.engine import async_engine
-from models.base import Base
 
 
 app = create_app()

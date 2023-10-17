@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @DateTime: 2023/10/17 14:30
 # @SoftWare: PyCharm
-from fastapi import Depends, APIRouter
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from .routers import account_router
