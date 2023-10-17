@@ -1,0 +1,5 @@
+fastapi==0.103.2
+SQLAlchemy==2.0.22
+pydantic==1.10.2
+asyncmy==0.2.8
+python-jose==3.3.0
