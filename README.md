@@ -1,4 +1,4 @@
-### fastapi与sqlalchemy 2.x结合的一个应用
+### fastapi结合sqlalchemy 2.x开发的一个异步Web Service应用
 - python3.9
 - fastapi
 - sqlalchemy 2.x

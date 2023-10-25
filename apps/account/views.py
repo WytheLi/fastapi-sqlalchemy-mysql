@@ -10,6 +10,11 @@ from .schemas import LoggedInSchema
 from . import services
 
 
+@account_router.post("register")
+async def login(form_data):
+    pass
+
+
 @account_router.post("/login", response_model=LoggedInSchema, description="登录")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     token = await services.login(form_data)
