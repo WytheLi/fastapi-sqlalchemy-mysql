@@ -6,16 +6,21 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from .routers import account_router
-from .schemas import LoggedInSchema
+from .schemas.request import RegisterSchema
+from .schemas.response import LoggedInSchema, RegisterResponse
 from . import services
 
 
-@account_router.post("register")
-async def login(form_data):
-    pass
+@account_router.post("/register", response_model=RegisterResponse, tags=["用户"], name="注册")
+async def register(form_data: RegisterSchema):
+    await services.register(form_data)
+    return RegisterResponse()
 
 
-@account_router.post("/login", response_model=LoggedInSchema, description="登录")
+@account_router.post("/login", response_model=LoggedInSchema, tags=["用户"], name="登录")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     token = await services.login(form_data)
-    return LoggedInSchema(access_token=token)
+    return LoggedInSchema(data={"access_token": token})
+
+
+# cbv 类视图

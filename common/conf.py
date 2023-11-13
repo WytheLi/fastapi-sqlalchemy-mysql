@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from functools import lru_cache     # 缓存执行函数的结果
 
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):

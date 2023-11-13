@@ -4,7 +4,7 @@
 # @SoftWare: PyCharm
 from typing import Any
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 
 class BaseExceptionMixin(Exception):
@@ -20,49 +20,49 @@ class HTTPError(HTTPException):
 
 
 class RequestError(BaseExceptionMixin):
-    code = 400
+    code = status.HTTP_400_BAD_REQUEST
 
     def __init__(self, *, msg: str = 'Bad Request', data: Any = None):
         super().__init__(msg=msg, data=data)
 
 
 class ForbiddenError(BaseExceptionMixin):
-    code = 403
+    code = status.HTTP_403_FORBIDDEN
 
     def __init__(self, *, msg: str = 'Forbidden', data: Any = None):
         super().__init__(msg=msg, data=data)
 
 
 class NotFoundError(BaseExceptionMixin):
-    code = 404
+    code = status.HTTP_404_NOT_FOUND
 
     def __init__(self, *, msg: str = 'Not Found', data: Any = None):
         super().__init__(msg=msg, data=data)
 
 
 class ServerError(BaseExceptionMixin):
-    code = 500
+    code = status.HTTP_500_INTERNAL_SERVER_ERROR
 
     def __init__(self, *, msg: str = 'Internal Server Error', data: Any = None):
         super().__init__(msg=msg, data=data)
 
 
 class GatewayError(BaseExceptionMixin):
-    code = 502
+    code = status.HTTP_502_BAD_GATEWAY
 
     def __init__(self, *, msg: str = 'Bad Gateway', data: Any = None):
         super().__init__(msg=msg, data=data)
 
 
 class AuthorizationError(BaseExceptionMixin):
-    code = 401
+    code = status.HTTP_401_UNAUTHORIZED
 
     def __init__(self, *, msg: str = 'Permission denied', data: Any = None):
         super().__init__(msg=msg, data=data)
 
 
 class TokenError(BaseExceptionMixin):
-    code = 401
+    code = status.HTTP_401_UNAUTHORIZED
 
     def __init__(self, *, msg: str = 'Token is invalid', data: Any = None):
         super().__init__(msg=msg, data=data)
