@@ -1,11 +1,11 @@
 from passlib.context import CryptContext
-from asgiref.sync import sync_to_async  # 将同步函数转化成异步函数
+from asgiref.sync import sync_to_async
 
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
-@sync_to_async
+@sync_to_async  # 将同步函数转化成异步函数
 def get_hash_password(password: str) -> str:
     """
     使用hash算法加密密码

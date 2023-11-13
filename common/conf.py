@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from functools import lru_cache     # 缓存执行函数的结果
+from functools import lru_cache
+import os
+from pathlib import Path
 
 from pydantic_settings import BaseSettings
+
+
+# 获取项目根目录
+workspaceFolder = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):
@@ -21,6 +27,11 @@ class Settings(BaseSettings):
 
     # Static Server
     STATIC_FILES: bool = True
+
+    # Log
+    LOG_LEVEL: str = "INFO"
+    LOG_PATH: str = os.path.join(workspaceFolder, 'logs', 'fastapi-{time:YYYY-MM-DD}.log')
+    LOG_FORMATTER: str = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
 
     # DB
     DB_ECHO: bool = False
@@ -45,7 +56,7 @@ class Settings(BaseSettings):
     TOKEN_EXPIRES: int = 60 * 24 * 1  # token 时效 60 * 24 * 1 = 1 天
 
 
-@lru_cache
+@lru_cache  # 缓存执行函数的结果
 def get_settings():
     """
         读取配置并缓存

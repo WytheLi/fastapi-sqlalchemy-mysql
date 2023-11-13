@@ -3,7 +3,7 @@
 # @DateTime: 2023/10/17 14:17
 # @SoftWare: PyCharm
 import uvicorn
-from fastapi.logger import logger
+from common.logger import logger
 
 from common.conf import settings
 from common.register import create_app
