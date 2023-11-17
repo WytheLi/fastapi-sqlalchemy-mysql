@@ -1,9 +1,11 @@
-from pydantic import BaseModel, Field
+from typing import Any
+from pydantic import BaseModel
 
 
 class SuccessSchema(BaseModel):
     code: int = 200
-    message: str = "Success."
+    message: str = "Request successful."
+    data: Any = None
 
 
 class FailSchema(BaseModel):

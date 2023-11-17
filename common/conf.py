@@ -3,8 +3,12 @@
 from functools import lru_cache
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 from pydantic_settings import BaseSettings
+
+
+load_dotenv(verbose=True)
 
 
 # 获取项目根目录
@@ -21,39 +25,45 @@ class Settings(BaseSettings):
     OPENAPI_URL: str = '/v1/openapi'
 
     # Uvicorn
-    UVICORN_HOST: str = '127.0.0.1'
-    UVICORN_PORT: int = 8000
-    UVICORN_RELOAD: bool = True
+    UVICORN_HOST: str = os.getenv('UVICORN_HOST', '127.0.0.1')
+    UVICORN_PORT: int = os.getenv('UVICORN_PORT', 8000)
+    UVICORN_RELOAD: bool = os.getenv('UVICORN_RELOAD', True)
 
     # Static Server
-    STATIC_FILES: bool = True
+    STATIC_FILES: bool = os.getenv('STATIC_FILES', False)
 
     # Log
-    LOG_LEVEL: str = "INFO"
-    LOG_PATH: str = os.path.join(workspaceFolder, 'logs', 'fastapi-{time:YYYY-MM-DD}.log')
-    LOG_FORMATTER: str = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
+    log_file = os.path.join(workspaceFolder, 'logs', 'fastapi-{time:YYYY-MM-DD}.log')
+    log_formatter = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
+    LOG_LEVEL: str = os.getenv('LOG_LEVEL', "INFO")
+    LOG_PATH: str = os.getenv('LOG_PATH', log_file)
+    LOG_FORMATTER: str = os.getenv('LOG_FORMATTER', log_formatter)
 
     # DB
-    DB_ECHO: bool = False
-    DB_HOST: str = '127.0.0.1'
-    DB_PORT: int = 3306
-    DB_USER: str = 'root'
-    DB_PASSWORD: str = 'vivi1911'
-    DB_DATABASE: str = 'fastapi_demo'
-    DB_CHARSET: str = 'utf8mb4'
+    DB_ECHO: bool = os.getenv('DB_ECHO', True)
+    DB_HOST: str = os.getenv('DB_HOST', '127.0.0.1')
+    DB_PORT: int = os.getenv('DB_PORT', 3306)
+    DB_USER: str = os.getenv('DB_USER', 'root')
+    DB_PASSWORD: str = os.getenv('DB_PASSWORD', 'pwd123456')
+    DB_DATABASE: str = os.getenv('DB_DATABASE', 'demo')
+    DB_CHARSET: str = os.getenv('DB_CHARSET', 'utf8mb4')
 
     # Redis
-    REDIS_OPEN: bool = False
-    REDIS_HOST: str = '127.0.0.1'
-    REDIS_PORT: int = 6379
-    REDIS_PASSWORD: str = ''
-    REDIS_DATABASE: int = 0
-    REDIS_TIMEOUT: int = 5
+    REDIS_OPEN: bool = os.getenv('REDIS_OPEN', False)
+    REDIS_HOST: str = os.getenv('REDIS_HOST', '127.0.0.1')
+    REDIS_PORT: int = os.getenv('REDIS_PORT', 6379)
+    REDIS_PASSWORD: str = os.getenv('REDIS_PASSWORD', '')
+    REDIS_DATABASE: int = os.getenv('REDIS_DATABASE', 0)
+    REDIS_TIMEOUT: int = os.getenv('REDIS_TIMEOUT', 5)
 
     # Token
-    TOKEN_ALGORITHM: str = 'HS256'  # 算法
-    TOKEN_SECRET_KEY: str = '1VkVF75nsNABBjK_7-qz7GtzNy3AMvktc9TCPwKczCk'  # 密钥 secrets.token_urlsafe(32))
-    TOKEN_EXPIRES: int = 60 * 24 * 1  # token 时效 60 * 24 * 1 = 1 天
+    TOKEN_ALGORITHM: str = os.getenv('TOKEN_ALGORITHM', 'HS256')  # 算法
+    TOKEN_SECRET_KEY: str = os.getenv('TOKEN_SECRET_KEY', '1VkVF75nsNABBjK_7-qz7GtzNy3AMvktc9TCPwKczCk')  # 密钥 secrets.token_urlsafe(32))
+    TOKEN_EXPIRES: int = os.getenv('TOKEN_EXPIRES', 60 * 24 * 1)  # token 时效 60 * 24 * 1 = 1 天
+
+    # MIDDLEWARE
+    MIDDLEWARE_CORS: bool = os.getenv('MIDDLEWARE_CORS', True)
+    MIDDLEWARE_GZIP: bool = os.getenv('MIDDLEWARE_GZIP', True)
 
 
 @lru_cache  # 缓存执行函数的结果

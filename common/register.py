@@ -4,6 +4,8 @@
 # @SoftWare: PyCharm
 # 注册模块
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 
 from common.conf import settings
 from db.engine import create_table
@@ -17,24 +19,19 @@ def create_app():
         description=settings.DESCRIPTION,
         docs_url=settings.DOCS_URL,
         redoc_url=settings.REDOCS_URL,
-        openapi_url=settings.OPENAPI_URL
+        openapi_url=settings.OPENAPI_URL,
+        lifespan=init_app
     )
 
     if settings.STATIC_FILES:
-        # 注册静态文件
+        # 注册静态文件服务
         register_static_file(app)
 
     # 中间件
-    # register_middleware(app)
+    add_middleware(app)
 
     # 路由
     register_router(app)
-
-    # 初始化连接
-    register_init(app)
-
-    # 分页
-    # register_page(app)
 
     # 全局异常处理
     # register_exception(app)
@@ -42,9 +39,22 @@ def create_app():
     return app
 
 
+def init_app(app: FastAPI):
+    """
+        初始化
+    Args:
+        app (FastAPI): _description_
+    """
+
+    # # limiter请求限频率
+    # from fastapi_limiter import FastAPILimiter
+    # await FastAPILimiter.init(redis_client, prefix=settings.LIMITER_REDIS_PREFIX, http_callback=http_limit_callback)
+    yield
+
+
 def register_router(app: FastAPI):
     """
-    路由
+        注册路由
 
     :param app: FastAPI
     :return:
@@ -54,7 +64,7 @@ def register_router(app: FastAPI):
 
 def register_static_file(app: FastAPI):
     """
-    静态文件交互开发模式, 生产使用 nginx 静态资源服务
+        静态文件交互开发模式, 生产使用 nginx 静态资源服务
 
     :param app:
     :return:
@@ -66,14 +76,14 @@ def register_static_file(app: FastAPI):
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-def register_init(app: FastAPI):
+def on_event(app: FastAPI):
     """
-    初始化连接
+        fastapi事件监听器
+        用于web service服务启动前后的一些操作，如：服务启动前根据模型创建数据库表
 
     :param app: FastAPI
     :return:
     """
-
     @app.on_event("startup")
     async def startup_event():
         # 创建数据库表
@@ -89,11 +99,17 @@ def register_init(app: FastAPI):
             await redis_client.close()
 
 
-def register_page(app: FastAPI):
-    """
-    分页查询
+def add_middleware(app) -> None:
+    # gzip
+    if settings.MIDDLEWARE_GZIP:
+        app.add_middleware(GZipMiddleware)
 
-    :param app:
-    :return:
-    """
-    add_pagination(app)
+    # 跨域
+    if settings.MIDDLEWARE_CORS:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=['*'],
+            allow_credentials=True,
+            allow_methods=['*'],
+            allow_headers=['*'],
+        )

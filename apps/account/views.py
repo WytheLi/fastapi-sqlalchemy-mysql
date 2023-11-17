@@ -21,6 +21,3 @@ async def register(form_data: RegisterSchema):
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     token = await services.login(form_data)
     return LoggedInSchema(data={"access_token": token})
-
-
-# cbv 类视图

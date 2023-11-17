@@ -5,7 +5,9 @@
 from fastapi import APIRouter
 
 from apps.account import account_router
+from apps.news import news_router
 
 router = APIRouter(prefix='/v1')
 
 router.include_router(account_router, prefix='/users', tags=['用户管理'])
+router.include_router(news_router, prefix='/news', tags=['新闻管理'])

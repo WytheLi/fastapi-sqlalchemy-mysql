@@ -20,9 +20,12 @@ from sqlalchemy.orm import relationship
 
 
 class Base(DeclarativeBase):
-    create_time = Column(DateTime, default=func.now(), doc='创建时间')
-    update_time = Column(DateTime, default=func.now(), onupdate=func.now(), doc='更新时间')
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
+
+
+class BaseModel(object):
+    create_time = Column(DateTime, default=func.now(), doc='创建时间')
+    update_time = Column(DateTime, default=func.now(), onupdate=func.now(), doc='更新时间')
