@@ -3,12 +3,15 @@
 # @DateTime: 2023/10/17 16:56
 # @SoftWare: PyCharm
 # 注册模块
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 
 from common.conf import settings
-from db.engine import create_table
+from db.async_engine import create_table, async_session
+from db.engine import session
+from models.users import Users
 from routers import router
 
 
@@ -39,12 +42,17 @@ def create_app():
     return app
 
 
-def init_app(app: FastAPI):
+async def init_app(app: FastAPI):
     """
         初始化
     Args:
         app (FastAPI): _description_
     """
+    # 创建数据库表
+    await create_table()
+
+    # 创建管理员用户
+    await create_superuser()
 
     # # limiter请求限频率
     # from fastapi_limiter import FastAPILimiter
@@ -86,11 +94,9 @@ def on_event(app: FastAPI):
     """
     @app.on_event("startup")
     async def startup_event():
-        # 创建数据库表
-        await create_table()
-        # if settings.REDIS_OPEN:
-        #     # 连接redis
-        #     await redis_client.init_redis_connect()
+        if settings.REDIS_OPEN:
+            # 连接redis
+            await redis_client.init_redis_connect()
 
     @app.on_event("shutdown")
     async def shutdown_event():
@@ -113,3 +119,15 @@ def add_middleware(app) -> None:
             allow_methods=['*'],
             allow_headers=['*'],
         )
+
+
+async def create_superuser():
+    async with async_session() as session:
+        user = Users()
+        user.username = settings.SUPERUSER_USERNAME
+        user.mobile = settings.SUPERUSER_USERNAME
+        user.password = settings.SUPERUSER_PASSWORD
+        user.is_admin = True
+
+        session.add(user)
+        await session.commit()

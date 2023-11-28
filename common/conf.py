@@ -3,6 +3,7 @@
 from functools import lru_cache
 import os
 from pathlib import Path
+from typing import ClassVar
 from dotenv import load_dotenv
 
 from pydantic_settings import BaseSettings
@@ -33,8 +34,8 @@ class Settings(BaseSettings):
     STATIC_FILES: bool = os.getenv('STATIC_FILES', False)
 
     # Log
-    log_file = os.path.join(workspaceFolder, 'logs', 'fastapi-{time:YYYY-MM-DD}.log')
-    log_formatter = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
+    log_file: ClassVar[str] = os.path.join(workspaceFolder, 'logs', 'fastapi-{time:YYYY-MM-DD}.log')
+    log_formatter: ClassVar[str] = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
     LOG_LEVEL: str = os.getenv('LOG_LEVEL', "INFO")
     LOG_PATH: str = os.getenv('LOG_PATH', log_file)
     LOG_FORMATTER: str = os.getenv('LOG_FORMATTER', log_formatter)
@@ -44,7 +45,7 @@ class Settings(BaseSettings):
     DB_HOST: str = os.getenv('DB_HOST', '127.0.0.1')
     DB_PORT: int = os.getenv('DB_PORT', 3306)
     DB_USER: str = os.getenv('DB_USER', 'root')
-    DB_PASSWORD: str = os.getenv('DB_PASSWORD', 'pwd123456')
+    DB_PASSWORD: str = os.getenv('DB_PASSWORD', 'vivi1911')
     DB_DATABASE: str = os.getenv('DB_DATABASE', 'demo')
     DB_CHARSET: str = os.getenv('DB_CHARSET', 'utf8mb4')
 
@@ -64,6 +65,10 @@ class Settings(BaseSettings):
     # MIDDLEWARE
     MIDDLEWARE_CORS: bool = os.getenv('MIDDLEWARE_CORS', True)
     MIDDLEWARE_GZIP: bool = os.getenv('MIDDLEWARE_GZIP', True)
+
+    # Administrator
+    SUPERUSER_USERNAME: str = os.getenv('SUPERUSER_USERNAME', 'admin')
+    SUPERUSER_PASSWORD: str = os.getenv('SUPERUSER_PASSWORD', 'qwe123456')
 
 
 @lru_cache  # 缓存执行函数的结果

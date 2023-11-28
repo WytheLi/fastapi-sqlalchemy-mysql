@@ -5,19 +5,20 @@
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
+from common.response import response_success
+
 from .routers import account_router
 from .schemas.request import RegisterSchema
-from .schemas.response import LoggedInSchema, RegisterResponse
 from . import services
 
 
-@account_router.post("/register", response_model=RegisterResponse, tags=["用户"], name="注册")
+@account_router.post("/register", tags=["用户"], name="注册")
 async def register(form_data: RegisterSchema):
     await services.register(form_data)
-    return RegisterResponse()
+    return response_success(msg="registered successful.")
 
 
-@account_router.post("/login", response_model=LoggedInSchema, tags=["用户"], name="登录")
+@account_router.post("/login", tags=["用户"], name="登录")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     token = await services.login(form_data)
-    return LoggedInSchema(data={"access_token": token})
+    return response_success(data={"access_token": token})

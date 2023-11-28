@@ -7,6 +7,7 @@ CREATE TABLE users (
 	avatar_url varchar(256) NULL COMMENT '用户头像',
 	gender INT DEFAULT 0 NULL COMMENT '性别',
 	is_active BOOL DEFAULT true NULL COMMENT '有效用户',
+	is_admin BOOL DEFAULT true NULL COMMENT '管理员用户',
 	last_login DATETIME NULL COMMENT '最近登录时间',
 	create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
 	update_time DATETIME NULL,

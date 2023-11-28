@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 import common.exceptions as exceptions
 from common import signature
 from . import repo
-from db.engine import async_session
+from db.async_engine import async_session
 
 
 async def login(form_data: OAuth2PasswordRequestForm):

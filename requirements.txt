@@ -11,3 +11,4 @@ email-validator==2.1.0.post1
 asgiref==3.7.2
 aiomysql==0.2.0
 bcrypt==4.0.1
+loguru

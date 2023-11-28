@@ -30,6 +30,7 @@
 7. https://docs.pydantic.dev/latest/
 8. https://docs.sentry.io/platforms/python/integrations/fastapi/
 9. fastapi-pagination 
+10. flask-script https://github.com/smurfix/flask-script
 
 
 ### 数据库建模分析

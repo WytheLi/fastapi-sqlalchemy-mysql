@@ -50,6 +50,7 @@ class Users(BaseModel, Base):
     avatar_url = Column(String(256), doc="用户头像")
     gender = Column(SmallInteger, default=0, doc="性别，0：未透露性别，1：男性，2：女性")
     is_active = Column(Boolean, default=True, doc="有效用户")
+    is_admin = Column(Boolean, default=False, doc="管理员")
     last_login = Column(DateTime, onupdate=func.now(), doc="最近登录时间")
     news = relationship('News', backref='users', lazy='dynamic')     # 当前用户所发布的新闻
     collection_news = relationship("News", secondary=user_collection_rel, lazy="dynamic")  # 当前用户收藏的所有新闻lazy="dynamic"
