@@ -9,8 +9,8 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 
 from common.conf import settings
-from db.async_engine import create_table, async_session
-from db.engine import session
+from db.async_engine import create_table, async_session, get_async_session
+from db.sync_engine import sync_session
 from models.users import Users
 from routers import router
 
@@ -23,7 +23,7 @@ def create_app():
         docs_url=settings.DOCS_URL,
         redoc_url=settings.REDOCS_URL,
         openapi_url=settings.OPENAPI_URL,
-        lifespan=init_app
+        # lifespan=init_app
     )
 
     if settings.STATIC_FILES:
@@ -122,12 +122,14 @@ def add_middleware(app) -> None:
 
 
 async def create_superuser():
-    async with async_session() as session:
-        user = Users()
-        user.username = settings.SUPERUSER_USERNAME
-        user.mobile = settings.SUPERUSER_USERNAME
-        user.password = settings.SUPERUSER_PASSWORD
-        user.is_admin = True
+    async with get_async_session() as session:
+        user = session.query(Users).filter(Users.is_admin.is_(True)).first()
+        if not user:
+            user = Users()
+            user.username = settings.SUPERUSER_USERNAME
+            user.mobile = settings.SUPERUSER_USERNAME
+            user.password = settings.SUPERUSER_PASSWORD
+            user.is_admin = True
 
-        session.add(user)
-        await session.commit()
+            session.add(user)
+            await session.commit()

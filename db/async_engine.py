@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import time
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
+
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
 from common.conf import settings
@@ -24,6 +27,9 @@ async def create_table():
 
 
 async def get_async_session() -> AsyncSession:
+    """
+    with 管理上下文，显式调用 async_session
+    """
     async with async_session() as session:
         try:
             yield session
@@ -34,3 +40,25 @@ async def get_async_session() -> AsyncSession:
             await session.commit()
         finally:
             await session.close()
+
+
+# @asynccontextmanager
+# async def get_async_session() -> AsyncGenerator:
+#     """
+#     contextmanager自动管理上下文
+#     """
+#     async with async_session() as session:
+#         try:
+#             yield session
+#         except Exception as ex:
+#             await session.rollback()
+#             raise ex
+#         else:
+#             await session.commit()
+#         finally:
+#             await session.close()
+#
+#
+# async def get_db_session() -> AsyncSession:
+#     async with get_async_session() as session:
+#         yield session

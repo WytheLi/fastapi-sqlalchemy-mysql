@@ -12,11 +12,11 @@ SQLALCHEMY_DATABASE_URL = f'mysql+mysql://{settings.DB_USER}:{settings.DB_PASSWO
 # 创建引擎（数据库连接的工厂，它还保留连接池内的连接以便快速重用）
 engine = create_session(SQLALCHEMY_DATABASE_URL, future=True)
 
-session = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+sync_session = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
 
-async def get_session() -> Session:
-    async with session() as session:
+async def get_sync_session() -> Session:
+    async with sync_session() as session:
         try:
             yield session
         except Exception as ex:
