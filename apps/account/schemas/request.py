@@ -1,6 +1,7 @@
 import re
 from pydantic import BaseModel, Field, field_validator
 from email_validator import validate_email, EmailNotValidError
+from pydantic_core.core_schema import ValidationInfo
 
 
 class RegisterSchema(BaseModel):
@@ -12,7 +13,7 @@ class RegisterSchema(BaseModel):
     
     @field_validator('email')
     @classmethod
-    def email_validate(cls, email: str):
+    def email_validate(cls, email: str, config: ValidationInfo):
         try:
             validate_email(email, check_deliverability=False).email
         except EmailNotValidError:
@@ -21,7 +22,7 @@ class RegisterSchema(BaseModel):
 
     @field_validator('mobile')
     @classmethod
-    def mobile_validate(cls, mobile: str):
+    def mobile_validate(cls, mobile: str, config: ValidationInfo):
         pattern = r'^(?:\+?86)?1(?:3\d{3}|5[^4\D]\d{2}|8\d{3}|7(?:[235-8]\d{2}|4(?:0\d|1[0-2]|9\d))|9[189]\d{2}|6[2567]\d{2}|4(?:[14]0\d{3}|[68]\d{4}|[579]\d{2}))\d{6}$'  
         if not re.match(pattern, mobile):  
             raise ValueError('手机号码格式错误')
