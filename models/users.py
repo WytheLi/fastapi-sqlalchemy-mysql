@@ -19,7 +19,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref
 
-from models.base import Base, BaseModel
+from models.abstract import Base, BaseModel
 
 
 user_collection_rel = Table(
@@ -39,7 +39,7 @@ user_follower_rel = Table(
 )
 
 
-class Users(BaseModel, Base):
+class Users(BaseModel):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -65,7 +65,7 @@ class Users(BaseModel, Base):
         return f"User(id={self.id!r})"
 
 
-class Category(BaseModel, Base):
+class Category(BaseModel):
     """新闻分类"""
     __tablename__ = "category"
 
@@ -81,7 +81,7 @@ class Category(BaseModel, Base):
         
 
 
-class News(BaseModel, Base):
+class News(BaseModel):
     """新闻"""
     __tablename__ = "news"
 
@@ -99,7 +99,7 @@ class News(BaseModel, Base):
     comments = relationship("Comment", lazy="dynamic")  # 当前新闻的所有评论
 
 
-class Comment(BaseModel, Base):
+class Comment(BaseModel):
     """评论"""
     __tablename__ = "comment"
 
@@ -112,7 +112,7 @@ class Comment(BaseModel, Base):
     up_count = Column(Integer, default=0, doc="点赞条数")
 
 
-class CommentUp(Base):
+class CommentUp(BaseModel):
     """评论点赞"""
     __tablename__ = "comment_user_up_rel"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)

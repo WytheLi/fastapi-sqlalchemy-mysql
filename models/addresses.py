@@ -15,10 +15,10 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
-from models.base import Base
+from models.abstract import BaseModel
 
 
-class Addresses(Base):
+class Addresses(BaseModel):
     __tablename__ = "addresses"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)

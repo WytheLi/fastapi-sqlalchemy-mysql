@@ -6,7 +6,7 @@ from sqlalchemy.orm import create_session, sessionmaker, Session
 
 from common.conf import settings
 
-SQLALCHEMY_DATABASE_URL = f'mysql+mysql://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:' \
+SQLALCHEMY_DATABASE_URL = f'mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:' \
                           f'{settings.DB_PORT}/{settings.DB_DATABASE}?charset={settings.DB_CHARSET}'
 
 # 创建引擎（数据库连接的工厂，它还保留连接池内的连接以便快速重用）

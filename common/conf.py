@@ -45,9 +45,10 @@ class Settings(BaseSettings):
     DB_HOST: str = os.getenv('DB_HOST', '127.0.0.1')
     DB_PORT: int = os.getenv('DB_PORT', 3306)
     DB_USER: str = os.getenv('DB_USER', 'root')
-    DB_PASSWORD: str = os.getenv('DB_PASSWORD', 'vivi1911')
+    DB_PASSWORD: str = os.getenv('DB_PASSWORD', 'qwer123')
     DB_DATABASE: str = os.getenv('DB_DATABASE', 'demo')
     DB_CHARSET: str = os.getenv('DB_CHARSET', 'utf8mb4')
+    DATABASE_URL: str = os.getenv('DB_CHARSET', 'mysql+aiomysql://root:qwer123@localhost:3306/demo')
 
     # Redis
     REDIS_OPEN: bool = os.getenv('REDIS_OPEN', False)

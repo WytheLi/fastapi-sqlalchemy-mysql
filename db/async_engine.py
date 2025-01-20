@@ -21,7 +21,7 @@ async def create_table():
     """
     创建数据库表
     """
-    from models.base import Base
+    from models.abstract import Base
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
